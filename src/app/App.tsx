@@ -108,7 +108,7 @@ export default function App() {
     return [...list].sort((a, b) => {
       if (sort === 'alphabet') return a.firstName.localeCompare(b.firstName);
       if (sort === 'birthday') return getBirthDateValue(a.birthDate) - getBirthDateValue(b.birthDate);
-      return b.createdDate - a.createdDate;
+      return a.createdDate - b.createdDate;
     });
   }, [employees, position, query, sort]);
 
