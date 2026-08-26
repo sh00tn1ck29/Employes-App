@@ -47,7 +47,8 @@ export default function SortModal({ current, onSelect, onClose }: Props) {
                     type="radio"
                     name="sort-mobile"
                     checked={selected === opt.value}
-                    onChange={() => handleSelect(opt.value)}
+                    onChange={() => undefined}
+                    onClick={() => handleSelect(selected === opt.value ? 'createdDate' : opt.value)}
                   />
                   <span className="sort-option__control" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
@@ -78,7 +79,8 @@ export default function SortModal({ current, onSelect, onClose }: Props) {
                   type="radio"
                   name="sort-desktop"
                   checked={selected === opt.value}
-                  onChange={() => handleSelect(opt.value)}
+                  onChange={() => undefined}
+                  onClick={() => handleSelect(selected === opt.value ? 'createdDate' : opt.value)}
                 />
                 <span className="sort-option__control" aria-hidden="true">
                   <svg viewBox="0 0 24 24">
