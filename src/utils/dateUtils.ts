@@ -1,5 +1,3 @@
-const DAY_IN_MS = 86_400_000;
-
 function parseBirthDate(dateStr: string): [number, number, number] {
   const [day, month, year] = dateStr.split('.').map(Number);
   return [year, month, day];
@@ -12,27 +10,6 @@ export function getBirthDateValue(dateStr: string): number {
 
 export function getBirthYear(dateStr: string): number {
   return parseBirthDate(dateStr)[0];
-}
-
-function getNextBirthday(dateStr: string, today = new Date()): Date {
-  const [, month, day] = parseBirthDate(dateStr);
-  const next = new Date(today.getFullYear(), month - 1, day);
-
-  if (next < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
-    next.setFullYear(today.getFullYear() + 1);
-  }
-
-  return next;
-}
-
-export function getDaysUntilBirthday(dateStr: string): number {
-  const today = new Date();
-  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  return Math.round((getNextBirthday(dateStr, today).getTime() - startOfToday.getTime()) / DAY_IN_MS);
-}
-
-export function getNextBirthdayYear(dateStr: string): number {
-  return getNextBirthday(dateStr).getFullYear();
 }
 
 export function getAge(dateStr: string): number {
