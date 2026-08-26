@@ -1,0 +1,39 @@
+@use '../../common/scss/variables' as *;
+
+@keyframes profile-loader-rotate {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes profile-loader-dash {
+  0% { stroke-dasharray: 1px, 200px; stroke-dashoffset: 0; }
+  50% { stroke-dasharray: 100px, 200px; stroke-dashoffset: -15px; }
+  100% { stroke-dasharray: 100px, 200px; stroke-dashoffset: -125px; }
+}
+
+.profile-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+
+  &__spinner {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    color: $color-primary;
+    animation: profile-loader-rotate 1.4s linear infinite;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    circle {
+      stroke: currentColor;
+      stroke-width: 1px;
+      stroke-linecap: round;
+      animation: profile-loader-dash 1.4s ease-in-out infinite;
+    }
+  }
+}

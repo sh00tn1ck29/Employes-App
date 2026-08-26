@@ -1,0 +1,49 @@
+@use '../../common/scss/variables' as *;
+@use '../../common/scss/breakpoints' as *;
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: 77vh;
+  padding-top: 200px;
+
+  @include desktop {
+    padding-top: 136px;
+  }
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  &__title {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 22px;
+  }
+
+  &__message {
+    color: $color-text-secondary;
+    font-weight: 400;
+    margin-top: 4px;
+    margin-bottom: -6px;
+  }
+
+  &__retry {
+    color: $color-primary;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 6px;
+    font-family: inherit;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

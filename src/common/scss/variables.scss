@@ -1,0 +1,22 @@
+// ── Colors ────────────────────────────────────────────
+$color-primary:          #6534ff;
+$color-text:             #050510;
+$color-text-secondary:   #97979b;
+$color-text-muted:       #55555c;
+$color-icon:             #c3c3c6;
+$color-border:           rgba(195, 195, 198, 0.36);
+
+$color-bg:               #fff;
+$color-bg-subtle:        #f7f7f8;  // search input, hover, profile top
+$color-bg-light:         #f2f2f7;  // empty-state icon, footer border
+
+// ── Typography ────────────────────────────────────────
+$font-family: 'Inter', sans-serif;
+
+// ── Layout ────────────────────────────────────────────
+$content-max-width: 1280px;
+$app-min-width:     375px;
+
+// ── Z-index ───────────────────────────────────────────
+$z-backdrop: 40;
+$z-modal:    50;

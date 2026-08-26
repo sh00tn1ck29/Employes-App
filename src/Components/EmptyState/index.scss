@@ -1,0 +1,34 @@
+@use '../../common/scss/variables' as *;
+@use '../../common/scss/breakpoints' as *;
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: 77vh;
+  padding-top: 200px;
+
+  @include desktop {
+    padding-top: 136px;
+  }
+
+  &__icon {
+    width: 57px;
+    height: 56px;
+  }
+
+  &__title {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 22px;
+  }
+
+  &__subtitle {
+    color: $color-text-secondary;
+    font-weight: 400;
+    font-size: 16px;
+    text-align: center;
+    margin: 4px 0 -6px;
+  }
+}
