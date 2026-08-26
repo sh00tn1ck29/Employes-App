@@ -1,6 +1,6 @@
 # Employees Directory
 
-### [Live Demo](ADD_VERCEL_LINK_HERE)
+### [Live Demo](https://employes-app.vercel.app/?sortBy=birthDate)
 
 A responsive, Pixel-Perfect Single Page Application (SPA) built with React and TypeScript for searching, filtering, sorting, and viewing employee information. The application loads employee data from an external API, preserves selected parameters in the URL, and closely follows the provided Figma layouts and reference application.
 
@@ -66,4 +66,4 @@ npm run lint
 
 ### Author
 
-- **Maksym Shavryhin** — *Main Developer* ([GitHub Profile](https://github.com/sh00tn1ck29))
+- **Maksym Shavryhin** — _Main Developer_ ([GitHub Profile](https://github.com/sh00tn1ck29))
