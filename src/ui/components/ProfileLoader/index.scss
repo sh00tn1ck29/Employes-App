@@ -1,4 +1,4 @@
-@use '../../common/scss/variables' as *;
+@use '../../../common/scss/variables' as *;
 
 @keyframes profile-loader-rotate {
   to { transform: rotate(360deg); }

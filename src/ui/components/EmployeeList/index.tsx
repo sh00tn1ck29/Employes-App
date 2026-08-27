@@ -1,5 +1,5 @@
-import { type Employee, type SortMode } from '../../types/employee';
-import { getBirthYear } from '../../utils/dateUtils';
+import { type Employee, type SortMode } from '../../../types/employee';
+import { getBirthYear } from '../../../utils/dateUtils';
 import DateDivider from '../DateDivider';
 import EmployeeItem from '../EmployeeItem';
 import './index.scss';

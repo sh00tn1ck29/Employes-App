@@ -1,8 +1,8 @@
-import backIcon from '../../assets/icons/back.svg';
-import phoneIcon from '../../assets/icons/phone.svg';
-import starIcon from '../../assets/icons/star.svg';
-import { type Employee } from '../../types/employee';
-import { formatBirthDate, formatPosition, getAge, getEmployeeName } from '../../utils/dateUtils';
+import backIcon from '../../../assets/icons/back.svg';
+import phoneIcon from '../../../assets/icons/phone.svg';
+import starIcon from '../../../assets/icons/star.svg';
+import { type Employee } from '../../../types/employee';
+import { formatBirthDate, formatPosition, getAge, getEmployeeName } from '../../../utils/dateUtils';
 import './index.scss';
 
 interface Props {

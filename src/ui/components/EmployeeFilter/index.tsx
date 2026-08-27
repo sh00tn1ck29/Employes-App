@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import listIcon from '../../assets/icons/list.svg';
-import searchIcon from '../../assets/icons/search.svg';
-import { type SortMode } from '../../types/employee';
-import { formatPosition } from '../../utils/dateUtils';
+import listIcon from '../../../assets/icons/list.svg';
+import searchIcon from '../../../assets/icons/search.svg';
+import { type SortMode } from '../../../types/employee';
+import { formatPosition } from '../../../utils/dateUtils';
 import './index.scss';
 
 interface Props {
@@ -37,7 +37,10 @@ export default function EmployeeFilter({
       if (!tabs || !activeTab) return;
       const tabsRect = tabs.getBoundingClientRect();
       const tabRect = activeTab.getBoundingClientRect();
-      setIndicator({ left: tabRect.left - tabsRect.left + tabs.scrollLeft, width: tabRect.width });
+      setIndicator({
+        left: tabRect.left - tabsRect.left + tabs.scrollLeft,
+        width: tabRect.width,
+      });
     };
 
     updateIndicator();
@@ -81,7 +84,12 @@ export default function EmployeeFilter({
         )}
       </div>
 
-      <div ref={tabsRef} className="filter__tabs" role="tablist" aria-label="Employee positions">
+      <div
+        ref={tabsRef}
+        className="filter__tabs"
+        role="tablist"
+        aria-label="Employee positions"
+      >
         {positions.map((d) => (
           <button
             key={d}
@@ -99,7 +107,10 @@ export default function EmployeeFilter({
         ))}
         <span
           className="filter__tab-indicator"
-          style={{ width: indicator.width, transform: `translateX(${indicator.left}px)` }}
+          style={{
+            width: indicator.width,
+            transform: `translateX(${indicator.left}px)`,
+          }}
         />
       </div>
     </div>

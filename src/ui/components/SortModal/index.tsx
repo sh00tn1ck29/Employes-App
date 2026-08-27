@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import closeIcon from '../../assets/icons/close.svg';
-import { type SortMode } from '../../types/employee';
+import closeIcon from '../../../assets/icons/close.svg';
+import { type SortMode } from '../../../types/employee';
 import './index.scss';
 
 interface Props {

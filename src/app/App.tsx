@@ -1,29 +1,28 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import EmptyState from '../Components/EmptyState';
-import EmployeeFilter from '../Components/EmployeeFilter';
-import EmployeeList from '../Components/EmployeeList';
-import EmployeeProfile from '../Components/EmployeeProfile';
-import EmployeeSkeleton from '../Components/EmployeeSkeleton';
-import ErrorState from '../Components/ErrorState';
-import ProfileLoader from '../Components/ProfileLoader';
-import SortModal from '../Components/SortModal';
+import { Navigate, Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom';
+import EmptyState from '../ui/components/EmptyState';
+import EmployeeFilter from '../ui/components/EmployeeFilter';
+import EmployeeList from '../ui/components/EmployeeList';
+import EmployeeProfile from '../ui/components/EmployeeProfile';
+import EmployeeSkeleton from '../ui/components/EmployeeSkeleton';
+import ErrorState from '../ui/components/ErrorState';
+import ProfileLoader from '../ui/components/ProfileLoader';
+import SortModal from '../ui/components/SortModal';
 import { getEmployee, getEmployees } from '../services/employeesApi';
 import { type Employee, type SortMode } from '../types/employee';
 import { getBirthDateValue } from '../utils/dateUtils';
 import './App.scss';
 
-function readEmployeeId() {
-  const match = window.location.pathname.match(/^\/employees\/([^/]+)\/?$/);
-  return match ? decodeURIComponent(match[1]) : null;
-}
+const POSITIONS = ['All', 'DESIGNER', 'ANALYST', 'MANAGER', 'DEVELOPER', 'RECRUITER'];
 
-function readFilters() {
-  const params = new URLSearchParams(window.location.search);
+function readFilters(search: string) {
+  const params = new URLSearchParams(search);
   const requestedSort = params.get('sortBy');
   const sort: SortMode = requestedSort === 'alphabet' || requestedSort === 'birthDate'
     ? requestedSort === 'birthDate' ? 'birthday' : requestedSort
     : 'createdDate';
   const requestedPosition = params.get('position');
+
   return {
     query: params.get('searchText') ?? '',
     position: requestedPosition ? requestedPosition.toUpperCase() : 'All',
@@ -31,47 +30,24 @@ function readFilters() {
   };
 }
 
-const POSITIONS = ['All', 'DESIGNER', 'ANALYST', 'MANAGER', 'DEVELOPER', 'RECRUITER'];
-
 export default function App() {
-  const [initialFilters] = useState(() => readFilters());
-  const [query, setQuery] = useState(initialFilters.query);
-  const [position, setPosition] = useState(initialFilters.position);
-  const [sort, setSort] = useState<SortMode>(initialFilters.sort);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const profileMatch = useMatch('/employees/:employeeId');
+  const employeeId = profileMatch?.params.employeeId ?? null;
+  const { query, position, sort } = useMemo(() => readFilters(location.search), [location.search]);
   const [showSort, setShowSort] = useState(false);
-  const [employeeId, setEmployeeId] = useState<string | null>(readEmployeeId);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [profile, setProfile] = useState<Employee | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [requestVersion, setRequestVersion] = useState(0);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      const filters = readFilters();
-      setLoading(true);
-      setError(false);
-      setQuery(filters.query);
-      setPosition(filters.position);
-      setSort(filters.sort);
-      setEmployeeId(readEmployeeId());
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (query) params.set('searchText', query);
-    if (position !== 'All') params.set('position', position.toLowerCase());
-    if (sort !== 'createdDate') params.set('sortBy', sort === 'birthday' ? 'birthDate' : sort);
-    const search = params.toString();
-    const path = employeeId ? `/employees/${encodeURIComponent(employeeId)}` : '/';
-    window.history.replaceState(null, '', `${path}${search ? `?${search}` : ''}`);
-  }, [query, position, sort, employeeId]);
+  const requestKey = `${employeeId ?? 'employees'}:${requestVersion}`;
+  const [requestState, setRequestState] = useState({ key: '', error: false });
+  const loading = requestState.key !== requestKey;
+  const error = !loading && requestState.error;
 
   useEffect(() => {
     const controller = new AbortController();
+
     const request = employeeId
       ? getEmployee(employeeId, controller.signal).then((employee) => {
           setProfile(employee);
@@ -83,16 +59,27 @@ export default function App() {
         });
 
     request
+      .then(() => {
+        if (!controller.signal.aborted) setRequestState({ key: requestKey, error: false });
+      })
       .catch((requestError: unknown) => {
         if (requestError instanceof DOMException && requestError.name === 'AbortError') return;
-        setError(true);
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) setRequestState({ key: requestKey, error: true });
       });
 
     return () => controller.abort();
-  }, [employeeId, requestVersion]);
+  }, [employeeId, requestKey]);
+
+  const updateSearchParams = useCallback((updates: Record<string, string | null>) => {
+    const params = new URLSearchParams(location.search);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+      else params.delete(key);
+    });
+
+    navigate({ pathname: location.pathname, search: params.toString() }, { replace: true });
+  }, [location.pathname, location.search, navigate]);
 
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -113,40 +100,26 @@ export default function App() {
   }, [employees, position, query, sort]);
 
   const retry = useCallback(() => {
-    setLoading(true);
-    setError(false);
     setRequestVersion((version) => version + 1);
   }, []);
 
   const openProfile = (employee: Employee) => {
-    window.history.pushState(null, '', `/employees/${encodeURIComponent(employee.id)}${window.location.search}`);
-    setLoading(true);
-    setError(false);
-    setEmployeeId(employee.id);
+    navigate({ pathname: `/employees/${encodeURIComponent(employee.id)}`, search: location.search });
   };
 
   const closeProfile = () => {
-    window.history.pushState(null, '', `/${window.location.search}`);
-    setLoading(true);
-    setError(false);
-    setEmployeeId(null);
+    navigate({ pathname: '/', search: location.search });
   };
 
-  if (employeeId) {
-    if (loading) return <ProfileLoader />;
-    if (error || !profile) return <ErrorState onRetry={retry} />;
-    return <EmployeeProfile emp={profile} onBack={closeProfile} />;
-  }
-
-  return (
+  const directoryPage = (
     <div className="app">
       <EmployeeFilter
         query={query}
         dept={position}
         sort={sort}
         positions={POSITIONS}
-        onQueryChange={setQuery}
-        onDeptChange={setPosition}
+        onQueryChange={(value) => updateSearchParams({ searchText: value || null })}
+        onDeptChange={(value) => updateSearchParams({ position: value === 'All' ? null : value.toLowerCase() })}
         onSortOpen={() => setShowSort(true)}
       />
       {loading ? <EmployeeSkeleton /> : error ? <ErrorState onRetry={retry} /> : filtered.length === 0
@@ -155,10 +128,27 @@ export default function App() {
       {showSort && (
         <SortModal
           current={sort}
-          onSelect={(value) => { setSort(value); setShowSort(false); }}
+          onSelect={(value) => {
+            updateSearchParams({ sortBy: value === 'createdDate' ? null : value === 'birthday' ? 'birthDate' : value });
+            setShowSort(false);
+          }}
           onClose={() => setShowSort(false)}
         />
       )}
     </div>
+  );
+
+  const profilePage = loading
+    ? <ProfileLoader />
+    : error || !profile
+      ? <ErrorState onRetry={retry} />
+      : <EmployeeProfile emp={profile} onBack={closeProfile} />;
+
+  return (
+    <Routes>
+      <Route path="/" element={directoryPage} />
+      <Route path="/employees/:employeeId" element={profilePage} />
+      <Route path="*" element={<Navigate to={{ pathname: '/', search: location.search }} replace />} />
+    </Routes>
   );
 }

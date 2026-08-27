@@ -1,4 +1,4 @@
-import emptyIcon from '../../assets/icons/magnifying-glass.svg';
+import emptyIcon from '../../../assets/icons/magnifying-glass.svg';
 import './index.scss';
 
 export default function EmptyState() {

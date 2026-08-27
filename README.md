@@ -25,7 +25,7 @@ A responsive, Pixel-Perfect Single Page Application (SPA) built with React and T
 
 - **Framework & Language:** [React](https://react.dev/) (Functional Components, Hooks), [TypeScript](https://www.typescriptlang.org/) (Strict Typing)
 - **Styling & Methodology:** [Sass (SCSS)](https://sass-lang.com/), [BEM Methodology](https://en.bem.info/methodology/) (Block-Element-Modifier)
-- **Data & Navigation:** Fetch API, History API, URL Search Parameters
+- **Data & Navigation:** Fetch API, React Router v6, URL Search Parameters
 - **Build Tooling:** [Vite](https://vite.dev/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/)
 - **Deployment:** [Vercel](https://vercel.com/)
 
