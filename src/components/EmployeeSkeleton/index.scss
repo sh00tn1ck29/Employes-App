@@ -1,0 +1,34 @@
+@use '../../common/scss/variables' as *;
+
+@keyframes employee-skeleton-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.employee-list--loading {
+  gap: 24px;
+  margin-top: 4px;
+}
+
+.employees-list__skeleton {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  list-style: none;
+}
+
+.employee-skeleton {
+  &__avatar,
+  &__line {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.11);
+    animation: employee-skeleton-pulse 2s ease-in-out 0.5s infinite;
+  }
+
+  &__avatar { width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0; }
+  &__info span { border-radius: 10px; }
+  &__line--name { width: 144px; height: 27px; margin: -4px 0; transform: scale(1, 0.6); }
+  &__line--position { width: 80px; height: 20px; transform: scale(1, 0.6); }
+
+}

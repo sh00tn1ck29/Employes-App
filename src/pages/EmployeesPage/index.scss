@@ -1,0 +1,11 @@
+@use '../../common/scss/global';
+@use '../../common/scss/variables' as *;
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0 auto;
+  min-width: $app-min-width;
+
+}
